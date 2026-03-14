@@ -1,0 +1,23 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- House Body -->
+  <rect x="106" y="200" width="300" height="250" fill="#E0C097" stroke="#5D4037" stroke-width="10"/>
+  
+  <!-- Roof -->
+  <path d="M56 200 L256 50 L456 200" fill="#E53935" stroke="#B71C1C" stroke-width="10" stroke-linejoin="round"/>
+  
+  <!-- Chimney -->
+  <rect x="130" y="80" width="40" height="80" fill="#D84315" />
+  
+  <!-- Door -->
+  <rect x="226" y="300" width="60" height="150" fill="#795548" stroke="#3E2723" stroke-width="5"/>
+  <circle cx="270" cy="375" r="5" fill="#FFD54F" />
+  
+  <!-- Window -->
+  <rect x="326" y="250" width="50" height="50" fill="#81D4FA" stroke="#0288D1" stroke-width="5"/>
+  <line x1="351" y1="250" x2="351" y2="300" stroke="#0288D1" stroke-width="3"/>
+  <line x1="326" y1="275" x2="376" y2="275" stroke="#0288D1" stroke-width="3"/>
+  
+  <!-- Bushes/Grass -->
+  <path d="M56 450 Q80 420 106 450 T156 450 T206 450 L306 450 T356 450 T406 450 T456 450" fill="#4CAF50" />
+  <rect x="0" y="450" width="512" height="62" fill="#4CAF50" />
+</svg>

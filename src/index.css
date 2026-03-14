@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  --color-village-light: #f4f1ea;
+  --color-village-DEFAULT: #8b5e3c;
+  --color-village-dark: #5d4037;
+  --color-village-accent: #4caf50;
+  --color-village-secondary: #ffa000;
+  --font-sans: Inter, sans-serif;
+}
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply text-gray-100 font-sans bg-gray-900;
+}
+
+.bg-ashoka-pattern {
+  background-image: 
+    url('/ashoka-chakra.svg'),
+    linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95));
+  background-size: 400px 400px, cover;
+  background-repeat: repeat, no-repeat;
+  background-position: center center, center;
+  background-attachment: fixed, fixed;
+  background-blend-mode: multiply;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
