@@ -9,6 +9,7 @@ const Navbar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
+  const mobileMenuRef = useRef(null);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -16,9 +17,16 @@ const Navbar = () => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsProfileOpen(false);
       }
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && !event.target.closest('button[data-mobile-toggle]')) {
+        setIsOpen(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -193,6 +201,7 @@ const Navbar = () => {
 
           <div className="-mr-2 flex md:hidden">
             <button
+              data-mobile-toggle="true"
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-200 hover:text-white hover:bg-village-dark/50 focus:outline-none"
             >
@@ -203,8 +212,8 @@ const Navbar = () => {
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-[#FF9933] shadow-lg absolute w-full left-0">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <div ref={mobileMenuRef} className="md:hidden bg-[#FF9933] shadow-lg absolute w-full left-0 border-t border-white/20">
+          <div className="px-4 pt-4 pb-6 space-y-2">
             {user && navLinks.map((link) => (
               link.external ? (
                 <a
@@ -213,7 +222,7 @@ const Navbar = () => {
                   onClick={() => setIsOpen(false)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-village-dark/30 flex items-center gap-2"
+                  className="block px-4 py-3 rounded-lg text-base font-medium text-white hover:bg-white/10 flex items-center gap-3 active:bg-white/20 transition-colors"
                 >
                   {link.icon}
                   {link.name}
@@ -224,10 +233,10 @@ const Navbar = () => {
                   to={link.path}
                   onClick={() => setIsOpen(false)}
                   className={({ isActive }) =>
-                    `block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 flex items-center gap-2 ${
+                    `block px-4 py-3 rounded-lg text-base font-medium transition-all duration-300 flex items-center gap-3 ${
                       isActive 
-                        ? 'bg-white text-[#FF9933]' 
-                        : 'text-white hover:bg-village-dark/30'
+                        ? 'bg-white text-[#FF9933] font-bold shadow-md' 
+                        : 'text-white hover:bg-white/10 active:bg-white/20'
                     }`
                   }
                 >
@@ -237,43 +246,45 @@ const Navbar = () => {
               )
             ))}
             {user && (
-              <NavLink
-                to="/profile"
-                onClick={() => setIsOpen(false)}
-                className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-village-dark/30 flex items-center gap-2"
-              >
-                <div className="w-5 h-5 rounded-full overflow-hidden border border-white">
-                   {user.avatar ? <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" /> : <div className="bg-white text-orange-500 w-full h-full flex items-center justify-center text-xs font-bold">{user.name?.[0]}</div>}
-                </div>
-                My Profile
-              </NavLink>
+              <>
+                <div className="h-px bg-white/20 my-2 mx-4"></div>
+                <NavLink
+                  to="/profile"
+                  onClick={() => setIsOpen(false)}
+                  className="block px-4 py-3 rounded-lg text-base font-medium text-white hover:bg-white/10 flex items-center gap-3"
+                >
+                  <div className="w-6 h-6 rounded-full overflow-hidden border border-white shrink-0">
+                    {user.avatar ? <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" /> : <div className="bg-white text-orange-500 w-full h-full flex items-center justify-center text-xs font-bold">{user.name?.[0]}</div>}
+                  </div>
+                  My Profile
+                </NavLink>
+                <button
+                  onClick={() => { setIsOpen(false); handleLogout(); }}
+                  className="w-full text-left block px-4 py-3 rounded-lg text-base font-medium text-white hover:bg-red-500/20 flex items-center gap-3 text-red-100 hover:text-white"
+                >
+                  <LogOut size={18} />
+                  Logout
+                </button>
+              </>
             )}
             {!user && (
-              <div className="space-y-3 px-3 py-4 bg-black/20 rounded-xl mt-2">
+              <div className="space-y-4 px-2 pt-2">
                  <Link
                    to="/login"
                    onClick={() => setIsOpen(false)}
-                   className="block text-center text-white font-black text-lg py-2 hover:bg-white/10 rounded-lg"
+                   className="block text-center text-white font-black text-lg py-3 hover:bg-white/10 rounded-xl border border-white/20"
                  >
                    LOGIN
                  </Link>
                  <Link
                    to="/login"
                    onClick={() => setIsOpen(false)}
-                   className="block text-center bg-gradient-to-r from-[#FF69B4] to-[#FF1493] text-white font-black px-6 py-3 rounded-xl text-lg transition-all shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-[1px] active:shadow-none border-2 border-black tracking-wide uppercase"
+                   className="block text-center bg-gradient-to-r from-[#FF69B4] to-[#FF1493] text-white font-black px-6 py-3 rounded-xl text-lg transition-all shadow-lg active:scale-95 border-2 border-white/20 tracking-wide uppercase"
                  >
                    JOIN COMMUNITY
                  </Link>
               </div>
             )}
-             {user && (
-                <button
-                  onClick={() => { setIsOpen(false); handleLogout(); }}
-                  className="w-full text-left block px-3 py-2 rounded-md text-base font-medium bg-red-500/80 text-white"
-                >
-                  Logout
-                </button>
-              )}
           </div>
         </div>
       )}

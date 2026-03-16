@@ -12,10 +12,12 @@
 /* Base styles */
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   @apply text-gray-100 font-sans bg-gray-900;
+  overflow-x: hidden;
 }
 
 .bg-ashoka-pattern {

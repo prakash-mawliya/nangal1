@@ -15,7 +15,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="text-5xl md:text-7xl font-bold font-serif mb-4 drop-shadow-lg"
+          className="text-4xl md:text-5xl lg:text-7xl font-bold font-serif mb-4 drop-shadow-lg"
         >
           Welcome to <span className="text-green-400">Nangal</span>
         </motion.h1>

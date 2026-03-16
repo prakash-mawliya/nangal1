@@ -48,7 +48,7 @@ const Home = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9]"
+                className="text-4xl md:text-6xl lg:text-8xl font-black tracking-tighter leading-[0.9]"
               >
                 YOUR VILLAGE.<br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-orange-400">YOUR VOICE.</span>
@@ -146,7 +146,7 @@ const Home = () => {
          <div className="max-w-7xl mx-auto">
             <div className="mb-20">
                <h2 className="text-sm font-mono text-green-400 mb-2">/ FEATURES</h2>
-               <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tight">Everything you need<br/>to stay connected.</h3>
+               <h3 className="text-3xl md:text-5xl font-black uppercase tracking-tight">Everything you need<br/>to stay connected.</h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
