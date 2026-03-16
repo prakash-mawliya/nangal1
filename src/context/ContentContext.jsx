@@ -1,4 +1,6 @@
+import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore';
 import { createContext, useContext, useEffect, useState } from 'react';
+import { db } from '../firebase';
 
 const ContentContext = createContext();
 
@@ -44,60 +46,95 @@ const INITIAL_POSTS = [
 ];
 
 export const ContentProvider = ({ children }) => {
-  const [posts, setPosts] = useState(() => {
-    const savedPosts = localStorage.getItem('village_posts');
-    return savedPosts ? JSON.parse(savedPosts) : INITIAL_POSTS;
-  });
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Save to localStorage whenever posts change
+  // Real-time sync with Firebase
   useEffect(() => {
-    localStorage.setItem('village_posts', JSON.stringify(posts));
-  }, [posts]);
+    // If no DB (e.g. key missing), fall back or do nothing
+    if (!db) {
+      console.warn("Firebase DB not initialized");
+      setPosts(INITIAL_POSTS);
+      setLoading(false);
+      return;
+    }
 
-  // Sync across tabs
-  useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key === 'village_posts') {
-         // When another tab updates localStorage, update state here
-         setPosts(JSON.parse(e.newValue));
-      }
-    };
+    const q = query(collection(db, "posts"), orderBy("date", "desc"));
     
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    // Subscribe to updates
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const livePosts = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setPosts(livePosts);
+      setLoading(false);
+    }, (error) => {
+      console.error("Error fetching posts:", error);
+      // Fallback to local/mock data if firebase fails (e.g., config missing)
+      setLoading(false); 
+      setPosts(INITIAL_POSTS); 
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const addPost = (newPost) => {
-    const updatedPosts = [newPost, ...posts];
-    setPosts(updatedPosts);
+  const addPost = async (newPost) => {
+    try {
+      // Remove 'id' if present, let Firestore generate it
+      const { id, ...postData } = newPost; 
+      await addDoc(collection(db, "posts"), {
+        ...postData,
+        date: new Date().toISOString()
+      });
+    } catch (e) {
+      console.error("Error adding post: ", e);
+      alert("Error posting content. Check your firebase config.");
+    }
   };
 
-  const deletePost = (id) => {
-    const updatedPosts = posts.filter(post => post.id !== id);
-    setPosts(updatedPosts);
+  const deletePost = async (id) => {
+    try {
+      await deleteDoc(doc(db, "posts", id));
+    } catch (e) {
+      console.error("Error deleting post: ", e);
+    }
   };
 
-  const approvePost = (id) => {
-    const updatedPosts = posts.map(post => post.id === id ? { ...post, status: 'approved' } : post);
-    setPosts(updatedPosts);
+  const approvePost = async (id) => {
+    try {
+      const postRef = doc(db, "posts", id);
+      await updateDoc(postRef, {
+        status: 'approved'
+      });
+    } catch (e) {
+      console.error("Error approving post: ", e);
+    }
   };
 
-  const votePoll = (pollId, optionId) => {
-    const updatedPosts = posts.map(post => {
-      if (post.id === pollId && post.type === 'poll') {
-        const newOptions = post.options.map(opt => 
-          opt.id === optionId ? { ...opt, votes: opt.votes + 1 } : opt
-        );
-        const newTotalVotes = post.votes + 1;
-        return { ...post, options: newOptions, votes: newTotalVotes, engagement: newTotalVotes };
-      }
-      return post;
-    });
-    setPosts(updatedPosts);
+  const votePoll = async (pollId, optionId) => {
+    try {
+      const post = posts.find(p => p.id === pollId);
+      if (!post) return;
+
+      const postRef = doc(db, "posts", pollId);
+      const newOptions = post.options.map(opt => 
+        opt.id === optionId ? { ...opt, votes: (opt.votes || 0) + 1 } : opt
+      );
+      const newTotalVotes = (post.votes || 0) + 1;
+
+      await updateDoc(postRef, {
+        options: newOptions,
+        votes: newTotalVotes,
+        engagement: newTotalVotes
+      });
+    } catch (e) {
+      console.error("Error voting: ", e);
+    }
   };
 
   return (
-    <ContentContext.Provider value={{ posts, addPost, deletePost, approvePost, votePoll }}>
+    <ContentContext.Provider value={{ posts, addPost, deletePost, approvePost, votePoll, loading }}>
       {children}
     </ContentContext.Provider>
   );

@@ -1,20 +1,13 @@
 import { format } from 'date-fns';
+import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from 'firebase/firestore';
 import { Send, User } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { db } from '../../firebase';
 
 const ChatRoom = () => {
   const { user } = useAuth();
-  
-  // Initialize messages from LocalStorage or default
-  const [messages, setMessages] = useState(() => {
-    const savedMessages = localStorage.getItem('village_chat_messages');
-    return savedMessages ? JSON.parse(savedMessages) : [
-      { id: 1, user: 'Village Head', text: 'Welcome to the digital Gram Sabha!', timestamp: new Date(Date.now() - 3600000).toISOString() },
-      { id: 2, user: 'Ramesh (Farmer)', text: 'The new irrigation canal is working great.', timestamp: new Date(Date.now() - 1800000).toISOString() },
-    ];
-  });
-  
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef(null);
 
@@ -26,39 +19,39 @@ const ChatRoom = () => {
     scrollToBottom();
   }, [messages]);
 
-  // Sync with LocalStorage and listen for changes (User's device acts as server)
+  // Sync with Firestore
   useEffect(() => {
-    localStorage.setItem('village_chat_messages', JSON.stringify(messages));
-  }, [messages]);
-
-  useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key === 'village_chat_messages' && e.newValue) {
-        setMessages(JSON.parse(e.newValue));
-      }
-    };
+    if (!db) return;
     
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    const q = query(collection(db, "messages"), orderBy("timestamp", "asc"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const liveMessages = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        // Convert Firestore Timestamp to Date object for consistent formatting
+        timestamp: doc.data().timestamp?.toDate().toISOString() || new Date().toISOString()
+      }));
+      setMessages(liveMessages);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
 
-    const message = {
-      id: Date.now(),
-      user: user?.name || 'Guest',
-      text: newMessage,
-      timestamp: new Date().toISOString(),
-    };
-    
-    setMessages(prev => {
-        const updatedMessages = [...prev, message];
-        localStorage.setItem('village_chat_messages', JSON.stringify(updatedMessages));
-        return updatedMessages;
-    });
-    setNewMessage('');
+    try {
+      await addDoc(collection(db, "messages"), {
+        user: user?.name || 'Guest',
+        text: newMessage,
+        timestamp: serverTimestamp(),
+      });
+      setNewMessage('');
+    } catch (error) {
+      console.error("Error sending message: ", error);
+      alert("Error sending message. Check firebase config.");
+    }
   };
 
   return (
