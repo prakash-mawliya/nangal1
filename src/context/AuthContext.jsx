@@ -35,8 +35,16 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('village_user');
   };
 
+  const updateProfile = (updatedData) => {
+    setUser(prev => {
+      const newUser = { ...prev, ...updatedData };
+      localStorage.setItem('village_user', JSON.stringify(newUser));
+      return newUser;
+    });
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, updateProfile, loading }}>
       {!loading && children}
     </AuthContext.Provider>
   );

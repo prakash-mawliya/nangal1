@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { Route, BrowserRouter as Router, Routes, useLocation } from 'react-router-dom';
+import Footer from './components/layout/Footer';
 import Navbar from './components/layout/Navbar';
 import { AuthProvider } from './context/AuthContext';
 import { ContentProvider } from './context/ContentContext';
@@ -8,9 +10,15 @@ import Chat from './pages/Chat';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import News from './pages/News';
+import Profile from './pages/Profile';
 
 const AppContent = () => {
   const location = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   const isAuthPage = location.pathname === '/login';
   const isHomePage = location.pathname === '/';
 
@@ -35,15 +43,12 @@ const AppContent = () => {
           <Route path='/chat' element={<Chat />} />
           <Route path='/news' element={<News />} />
           <Route path='/admin' element={<Admin />} />
+          <Route path='/profile' element={<Profile />} />
           <Route path='/about' element={<About />} />
           <Route path='/login' element={<Login />} />
         </Routes>
       </main>
-      {!isAuthPage && (
-        <footer className='bg-green-900 text-village-light py-6 text-center text-sm'>
-          <p>&copy; {new Date().getFullYear()} Built by <a href="https://prakash-mawliya.vercel.app/" target="_blank" rel="noopener noreferrer" className="hover:text-village-secondary transition-colors underline decoration-village-secondary/50">Prakash</a> | Village Community Platform</p>
-        </footer>
-      )}
+      {!isAuthPage && <Footer />}
     </div>
   );
 };

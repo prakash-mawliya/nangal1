@@ -5,17 +5,17 @@ import { useAuth } from '../context/AuthContext';
 import { useContent } from '../context/ContentContext';
 
 const NewsCard = ({ post }) => (
-  <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-md overflow-hidden hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 border-l-4 border-village-dark cursor-pointer group">
+  <div className="bg-white/40 backdrop-blur-xl rounded-xl shadow-lg border border-white/50 overflow-hidden hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 border-l-4 border-l-[#FF1493] cursor-pointer group">
     <div className="p-6">
       <div className="flex justify-between items-start mb-2">
-        <h3 className="text-xl font-bold text-gray-900 group-hover:text-village-DEFAULT transition-colors">{post.title}</h3>
-        <span className="text-xs text-gray-700 bg-black/5 px-2 py-1 rounded-full group-hover:bg-village-light/50 transition-colors">{format(new Date(post.date), 'MMM d, yyyy')}</span>
+        <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#FF1493] transition-colors">{post.title}</h3>
+        <span className="text-xs text-gray-800 bg-white/50 px-2 py-1 rounded-full border border-white/20 group-hover:bg-[#FF1493]/10 transition-colors">{format(new Date(post.date), 'MMM d, yyyy')}</span>
       </div>
       <p className="text-gray-800 mb-4 font-medium">{post.description}</p>
-      <div className="flex items-center text-sm text-gray-600 space-x-4">
-        <span className="font-semibold text-village-dark">By {post.author}</span>
+      <div className="flex items-center text-sm text-gray-700 space-x-4">
+        <span className="font-semibold text-[#FF1493]">By {post.author}</span>
         {/* Engagement placeholder */}
-        <span className="flex items-center gap-1"><ThumbsUp size={14} /> {post.engagement || 0}</span> 
+        <span className="flex items-center gap-1"><ThumbsUp size={14} className="text-[#FF1493]" /> {post.engagement || 0}</span> 
       </div>
     </div>
   </div>
@@ -33,13 +33,13 @@ const PollCard = ({ post, onVote }) => {
   const totalVotes = post.votes || 0;
 
   return (
-    <div className="bg-white/80 backdrop-blur-md rounded-xl shadow-md overflow-hidden hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 border-l-4 border-village-secondary cursor-pointer">
+    <div className="bg-white/40 backdrop-blur-xl rounded-xl shadow-lg border border-white/50 overflow-hidden hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 border-l-4 border-l-[#FF1493] cursor-pointer">
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2 hover:text-village-secondary transition-colors">
-             <PieChart className="text-village-secondary animate-pulse" /> {post.title}
+          <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2 hover:text-[#FF1493] transition-colors">
+             <PieChart className="text-[#FF1493] animate-pulse" /> {post.title}
           </h3>
-          <span className="text-xs font-bold bg-village-secondary/20 text-village-dark px-2 py-1 rounded hover:bg-village-secondary hover:text-white transition-colors">POLL</span>
+          <span className="text-xs font-bold bg-[#FF1493]/10 text-[#FF1493] px-2 py-1 rounded hover:bg-[#FF1493] hover:text-white transition-colors">POLL</span>
         </div>
         <p className="text-gray-800 mb-6 font-medium">{post.description}</p>
         
@@ -53,8 +53,8 @@ const PollCard = ({ post, onVote }) => {
                   disabled={!!votedOption}
                   className={`w-full text-left px-4 py-3 rounded-lg border-2 transition-all relative z-10 flex justify-between items-center ${
                     votedOption === option.id 
-                      ? 'border-village-DEFAULT bg-village-light font-bold text-gray-900' 
-                      : 'border-gray-300 hover:border-village-secondary bg-white/50 text-gray-800'
+                      ? 'border-[#FF1493] bg-[#FF1493]/10 font-bold text-gray-900' 
+                      : 'border-white/40 hover:border-[#FF1493] bg-white/30 text-gray-800 backdrop-blur-sm'
                   }`}
                 >
                   <span>{option.text}</span>
@@ -62,7 +62,7 @@ const PollCard = ({ post, onVote }) => {
                 </button>
                 {/* Progress Bar Background */}
                 <div 
-                  className="absolute top-0 left-0 h-full bg-village-secondary/20 rounded-lg z-0 transition-all duration-1000"
+                  className="absolute top-0 left-0 h-full bg-[#FF1493]/20 rounded-lg z-0 transition-all duration-1000"
                   style={{ width: `${percentage}%` }}
                 />
               </div>
@@ -92,7 +92,7 @@ const CreatePostModal = ({ onClose }) => {
       description,
       author: user.name,
       date: new Date().toISOString(),
-      status: 'pending', // Pending approval
+      status: 'approved', // Auto-approved
       engagement: 0,
       ...(type === 'poll' && {
         options: pollOptions.filter(o => o.trim()).map((text, idx) => ({ id: `opt-${idx}`, text, votes: 0 })),
@@ -201,35 +201,54 @@ const News = () => {
   const filteredPosts = filter === 'all' ? sortedPosts : sortedPosts.filter(p => p.type === filter);
 
   return (
-    <div className="container mx-auto px-4 py-8 min-h-screen">
-      <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-white drop-shadow-lg">Community News & Polls</h1>
-          <p className="text-gray-200 drop-shadow-md">Stay updated with what's happening efficiently.</p>
+    <div className="min-h-screen bg-gradient-to-br from-[#FFF0F5]/70 via-[#FFF5EE]/70 to-[#E0FFFF]/70 backdrop-blur-md py-12 px-4 sm:px-6 lg:px-8 font-sans text-gray-900">
+      <div className="max-w-7xl mx-auto space-y-12">
+        {/* Header Section */}
+        <div className="text-center space-y-4">
+          <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-[#FF1493] to-[#FF69B4] drop-shadow-sm pb-2">
+            Community Pulse
+          </h1>
+          <p className="text-xl md:text-2xl font-medium text-gray-600 max-w-2xl mx-auto">
+            See what's trending, share your vibe, and vote on what matters.
+          </p>
         </div>
+
+        {/* Action Bar */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 bg-white/30 backdrop-blur-2xl p-6 rounded-3xl border border-white/40 shadow-xl ring-1 ring-white/60">
+           <div className="hidden md:block">
+              <h2 className="text-2xl font-bold text-gray-800 drop-shadow-sm">Latest Updates</h2>
+           </div>
         
-        <div className="flex items-center gap-4">
-           {/* Filter Tabs */}
-           <div className="flex bg-gray-200 p-1 rounded-lg">
-             {['all', 'news', 'poll'].map(f => (
+        <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-end">
+           {/* Filter Tabs - MoodMate Style */}
+           <div className="flex bg-white/40 backdrop-blur-md p-1.5 rounded-full shadow-inner border border-white/40 relative">
+             {['all', 'news', 'poll'].map((f) => (
                <button
                  key={f}
                  onClick={() => setFilter(f)}
-                 className={`px-4 py-1 rounded-md capitalize transition-all ${filter === f ? 'bg-white shadow text-village-DEFAULT font-bold' : 'text-gray-500'}`}
+                 className={`relative px-6 py-2.5 rounded-full text-sm font-bold capitalize transition-all duration-300 z-10 ${
+                   filter === f 
+                     ? 'text-white' 
+                     : 'text-gray-500 hover:text-gray-800'
+                 }`}
                >
-                 {f}s
+                 {filter === f && (
+                   <div className="absolute inset-0 bg-[#FF1493] rounded-full -z-10 shadow-md"></div>
+                 )}
+                 {f === 'all' ? 'Latest' : f === 'news' ? 'Popular' : 'Trending'}
                </button>
              ))}
            </div>
 
-           {user && (
-             <button 
-               onClick={() => setIsModalOpen(true)}
-               className="bg-village-accent hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg transition-transform hover:scale-105"
-             >
-               <Plus size={20} /> Create Post
-             </button>
-           )}
+          {user && (
+           <button 
+             onClick={() => setIsModalOpen(true)}
+             className="bg-[#FFCC00] hover:bg-[#FFD700] text-black font-black px-6 py-3 rounded-full flex items-center gap-2 transition-all shadow-lg active:scale-95 text-sm uppercase tracking-wide"
+           >
+             <Plus size={20} strokeWidth={3} />
+             Share Vibe
+           </button>
+          )}
         </div>
       </div>
 
@@ -241,13 +260,14 @@ const News = () => {
         ))}
 
         {filteredPosts.length === 0 && (
-          <div className="col-span-full text-center py-20 text-gray-300 font-medium bg-black/20 rounded-xl backdrop-blur-sm">
+          <div className="col-span-full text-center py-20 text-gray-500 font-medium bg-white/50 rounded-xl backdrop-blur-sm border-2 border-dashed border-gray-200">
             No updates found. Be the first to post!
           </div>
         )}
       </div>
 
       {isModalOpen && <CreatePostModal onClose={() => setIsModalOpen(false)} />}
+      </div>
     </div>
   );
 };
