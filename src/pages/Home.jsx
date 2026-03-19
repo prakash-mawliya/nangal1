@@ -18,22 +18,22 @@ const Home = () => {
     );
   }
 
-  return (
-    <div className="bg-[#050505] text-white overflow-x-hidden font-sans selection:bg-orange-500 selection:text-white">
+   return (
+      <div className="bg-[#050505] text-white overflow-x-hidden font-sans selection:bg-orange-500 selection:text-white">
       
       {/* 
         HERO SECTION 
         Inspired by MoodMate's "Your Mood. Your Music." -> "Your Village. Your Voice."
       */}
-      <section className="relative min-h-screen flex items-center justify-center px-6 py-20 overflow-hidden">
+         <section className="relative min-h-screen flex items-center justify-center overflow-hidden section-pad px-4 sm:px-6 lg:px-10">
         {/* Abstract Background Blobs */}
         <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-green-900/40 rounded-full blur-[120px] mix-blend-screen animate-pulse duration-10000"></div>
         <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-orange-900/30 rounded-full blur-[100px] mix-blend-screen animate-pulse duration-7000"></div>
         
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16 relative z-10">
+            <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center gap-12 lg:gap-16 relative z-10">
            
            {/* Text Content */}
-           <div className="flex-1 text-center md:text-left space-y-8">
+                <div className="flex-1 text-center md:text-left space-y-8">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -48,7 +48,7 @@ const Home = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-4xl md:text-6xl lg:text-8xl font-black tracking-tighter leading-[0.9]"
+                        className="fluid-h1 font-black tracking-tighter"
               >
                 YOUR VILLAGE.<br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-orange-400">YOUR VOICE.</span>
@@ -80,12 +80,12 @@ const Home = () => {
            </div>
 
            {/* Hero Visual */}
-           <motion.div 
-             initial={{ opacity: 0, x: 50 }}
-             animate={{ opacity: 1, x: 0 }}
-             transition={{ duration: 1 }}
-             className="flex-1 relative"
-           >
+                <motion.div 
+                   initial={{ opacity: 0, x: 50 }}
+                   animate={{ opacity: 1, x: 0 }}
+                   transition={{ duration: 1 }}
+                   className="flex-1 relative w-full max-w-xl mx-auto"
+                >
               <div className="relative z-10 w-full aspect-square max-w-[500px] border border-white/10 bg-white/5 backdrop-blur-md rounded-3xl p-6 shadow-2xl skew-y-3 hover:skew-y-0 transition-transform duration-700 ease-out">
                  {/* Mock UI Interface */}
                  <div className="h-full flex flex-col gap-4">
@@ -142,14 +142,14 @@ const Home = () => {
         FEATURES SECTION 
         Inspired by MoodMate's "How It Works" 
       */}
-      <section className="py-32 px-6 relative">
+      <section className="section-pad px-4 sm:px-6 relative">
          <div className="max-w-7xl mx-auto">
             <div className="mb-20">
                <h2 className="text-sm font-mono text-green-400 mb-2">/ FEATURES</h2>
                <h3 className="text-3xl md:text-5xl font-black uppercase tracking-tight">Everything you need<br/>to stay connected.</h3>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="auto-grid">
                {[
                  { title: 'Digital Panchayat', icon: <Shield size={32} />, desc: 'Transparent governance with real-time updates and digital record keeping.' },
                  { title: 'Community Chat', icon: <MessageCircle size={32} />, desc: 'Connect with neighbors instantly. Discuss, debate, and decide together.' },
@@ -176,12 +176,12 @@ const Home = () => {
         BIG TEXT / TECH SECTION 
         Inspired by "Under the Hood/Science"
       */}
-      <section className="py-32 bg-white text-black relative overflow-hidden">
+      <section className="section-pad bg-white text-black relative overflow-hidden">
          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-black/10 to-transparent"></div>
          
-         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+         <div className="max-w-7xl mx-auto safe-x grid lg:grid-cols-2 gap-12 items-center">
             <div>
-               <h2 className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-none">
+               <h2 className="fluid-h1 font-black tracking-tighter mb-8 leading-none text-black">
                   BUILT FOR<br/>
                   <span className="text-green-600">IMPACT.</span>
                </h2>
@@ -204,7 +204,7 @@ const Home = () => {
             </div>
             
             <div className="relative">
-               <div className="aspect-square bg-gray-100 rounded-[3rem] overflow-hidden relative">
+               <div className="aspect-square bg-gray-100 rounded-[3rem] overflow-hidden relative max-w-xl mx-auto">
                   <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542601906990-24d4c16419d9?q=80&w=2674&auto=format&fit=crop')] bg-cover bg-center grayscale contrast-125 mix-blend-multiply opacity-50"></div>
                   <div className="absolute bottom-8 left-8 right-8 bg-white p-6 rounded-3xl shadow-xl">
                       <div className="flex items-center gap-4">
@@ -226,10 +226,10 @@ const Home = () => {
         CTA SECTION 
         "Ready to feel it?" -> "Ready to join?"
       */}
-      <section className="py-32 px-6 text-center relative overflow-hidden">
+      <section className="section-pad px-4 sm:px-6 text-center relative overflow-hidden">
          <div className="absolute inset-0 bg-gradient-to-b from-[#050505] to-[#111]"></div>
          <div className="relative z-10 max-w-4xl mx-auto">
-            <h2 className="text-5xl md:text-7xl font-black mb-8 tracking-tight">
+            <h2 className="fluid-h1 font-black mb-8 tracking-tight">
                READY TO BE PART<br/>OF THE <span className="text-[#FF9933]">CHANGE?</span>
             </h2>
             <p className="text-xl text-gray-400 mb-12">

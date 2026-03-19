@@ -36,7 +36,7 @@ const ConnectivityModal = ({ isOpen, onClose }) => {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative bg-black/80 backdrop-blur-xl border border-white/20 text-white rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col max-h-[90vh]"
+            className="relative bg-black/80 backdrop-blur-xl border border-white/20 text-white rounded-2xl shadow-2xl w-full max-w-[min(90vw,960px)] overflow-hidden flex flex-col max-h-[90vh]"
           >
             <div className="bg-green-600/20 p-6 text-white flex justify-between items-center shrink-0 border-b border-white/10">
               <div>
@@ -157,7 +157,7 @@ const PopulationModal = ({ isOpen, onClose }) => {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative bg-black/80 backdrop-blur-xl border border-white/20 text-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden"
+            className="relative bg-black/80 backdrop-blur-xl border border-white/20 text-white rounded-2xl shadow-2xl w-full max-w-[min(90vw,720px)] overflow-hidden"
           >
             <div className="bg-green-600/20 p-6 text-white flex justify-between items-center border-b border-white/10">
               <div>
@@ -261,23 +261,24 @@ const VillageInfo = () => {
   const [connectivityModalOpen, setConnectivityModalOpen] = useState(false);
 
   return (
-    <section id='info' className='py-20 relative overflow-hidden'>
+    <section id='info' className='section-pad relative overflow-hidden'>
       {/* Background Video for VillageInfo Section */}
       <video
         autoPlay
         loop
         muted
         playsInline
-        className="absolute top-0 left-0 w-full h-full object-cover -z-10 opacity-60 pointer-events-none"
+        className="absolute top-0 left-0 hidden sm:block w-full h-full object-cover -z-20 opacity-60 pointer-events-none"
       >
         <source src="https://v.ftcdn.net/16/32/61/25/700_F_1632612535_SRyevJf3jmVdIiMTkLSFR3Bua5aIhoty_ST.mp4" type="video/mp4" />
       </video>
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900/70 to-gray-900/40 -z-10"></div>
       <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-gray-900 via-gray-900/40 to-transparent pointer-events-none z-0"></div>
 
       <PopulationModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
       <ConnectivityModal isOpen={connectivityModalOpen} onClose={() => setConnectivityModalOpen(false)} />
       
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+      <div className='max-w-7xl mx-auto safe-x'>
         
         <div className='text-center mb-16 bg-black/40 backdrop-blur-md rounded-3xl p-8 max-w-4xl mx-auto border border-white/20 shadow-lg'>
           <h2 className='text-4xl font-bold text-white mb-4'>Nangal at a Glance</h2>
@@ -286,7 +287,7 @@ const VillageInfo = () => {
           </p>
         </div>
 
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-20'>
+        <div className='auto-grid mb-20'>
           <InfoCard 
             icon={Users} 
             title='Population' 
@@ -336,10 +337,10 @@ const VillageInfo = () => {
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            whileHover={{ scale: 1.05, rotate: 1 }}
+            whileHover={{ scale: 1.02, rotate: 0.5 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className='rounded-2xl overflow-hidden shadow-2xl h-80 relative group border-4 border-white cursor-pointer ring-4 hover:ring-village-accent/50'
+            className='rounded-2xl overflow-hidden shadow-2xl min-h-[260px] sm:min-h-[360px] relative group border-4 border-white cursor-pointer ring-4 hover:ring-village-accent/50'
           >
              {/* Map Placeholder or Image */}
              <div className='absolute inset-0 bg-gray-300 w-full h-full flex items-center justify-center text-gray-500'>

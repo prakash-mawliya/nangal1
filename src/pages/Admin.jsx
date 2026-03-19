@@ -22,13 +22,13 @@ const Admin = () => {
   const pendingPosts = posts.filter(p => p.status === 'pending');
 
   return (
-    <div className="container mx-auto px-4 py-8 min-h-screen">
-      <div className="flex items-center gap-4 mb-8">
+    <div className="max-w-6xl mx-auto safe-x py-10 min-h-screen">
+      <div className="flex flex-wrap items-center gap-4 mb-8">
         <ShieldCheck size={40} className="text-white drop-shadow-lg" />
         <h1 className="text-3xl font-bold text-white drop-shadow-lg">Village Admin Dashboard</h1>
       </div>
 
-      <div className="flex gap-4 mb-6 border-b border-white/30 pb-2">
+      <div className="flex flex-wrap gap-2 sm:gap-4 mb-6 border-b border-white/30 pb-2">
         <button 
           onClick={() => setActiveTab('pending')}
           className={`px-4 py-2 font-bold border-b-2 transition-all duration-300 transform hover:scale-105 ${activeTab === 'pending' ? 'border-village-secondary text-white' : 'border-transparent text-gray-400 hover:text-white hover:border-white/50'}`}

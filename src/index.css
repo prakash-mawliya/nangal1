@@ -20,6 +20,46 @@ body {
   overflow-x: hidden;
 }
 
+@layer base {
+  * {
+    min-width: 0;
+  }
+
+  img,
+  picture,
+  video,
+  canvas,
+  svg,
+  iframe {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+@layer utilities {
+  .safe-x {
+    padding-left: clamp(1rem, 4vw, 3rem);
+    padding-right: clamp(1rem, 4vw, 3rem);
+  }
+
+  .section-pad {
+    padding-top: clamp(3rem, 6vw, 6rem);
+    padding-bottom: clamp(3rem, 6vw, 6rem);
+  }
+
+  .fluid-h1 {
+    font-size: clamp(2.5rem, 8vw, 5.5rem);
+    line-height: 1.05;
+  }
+
+  .auto-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
 .bg-ashoka-pattern {
   background-image: 
     url('/ashoka-chakra.svg'),

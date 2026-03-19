@@ -57,7 +57,7 @@ const Login = () => {
 
     return (
         <div className="min-h-screen w-full flex items-center justify-center bg-[#FFF8F0] font-sans p-4 sm:p-8">
-            <div className="w-full max-w-[400px] md:max-w-5xl bg-white rounded-[2.5rem] overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-[3px] border-black flex flex-col md:flex-row relative">
+            <div className="w-full max-w-[min(90vw,1100px)] bg-white rounded-[2.5rem] overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-[3px] border-black flex flex-col md:flex-row relative">
                 
                 {/* Top/Left Section - Yellow Header */}
                 <div className="w-full md:w-1/2 bg-[#FFD700] h-[450px] md:h-[650px] relative overflow-hidden flex flex-col items-center pt-16 md:justify-center md:pt-0 border-b-[3px] md:border-b-0 md:border-r-[3px] border-black">

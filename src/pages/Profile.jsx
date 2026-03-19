@@ -34,7 +34,7 @@ const Profile = () => {
       <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-orange-100 rounded-full blur-[100px] -z-10 opacity-50 translate-x-[100px] translate-y-[100px]"></div>
       <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-green-100 rounded-full blur-[100px] -z-10 opacity-50 pointer-events-none"></div>
 
-      <div className="container mx-auto px-4 py-12 max-w-6xl relative z-10">
+      <div className="max-w-6xl mx-auto safe-x py-12 relative z-10">
         
         {/* Top Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-6">

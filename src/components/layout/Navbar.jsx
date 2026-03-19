@@ -29,6 +29,13 @@ const Navbar = () => {
     };
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   const handleLogout = () => {
     logout();
     navigate('/');
@@ -46,8 +53,8 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="bg-[#FF9933] text-white sticky top-0 z-50 shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="bg-[#FF9933]/95 backdrop-blur-sm text-white sticky top-0 z-50 shadow-md">
+      <div className="max-w-7xl mx-auto safe-x">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link 
@@ -203,7 +210,9 @@ const Navbar = () => {
             <button
               data-mobile-toggle="true"
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-200 hover:text-white hover:bg-village-dark/50 focus:outline-none"
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
+              className="inline-flex items-center justify-center p-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -212,8 +221,12 @@ const Navbar = () => {
       </div>
 
       {isOpen && (
-        <div ref={mobileMenuRef} className="md:hidden bg-[#FF9933] shadow-lg absolute w-full left-0 border-t border-white/20">
-          <div className="px-4 pt-4 pb-6 space-y-2">
+        <div
+          ref={mobileMenuRef}
+          id="mobile-menu"
+          className="md:hidden fixed inset-x-0 top-16 bottom-0 bg-[#FF9933] shadow-lg border-t border-white/20 z-40 overflow-y-auto"
+        >
+          <div className="safe-x pt-4 pb-10 space-y-3">
             {user && navLinks.map((link) => (
               link.external ? (
                 <a
